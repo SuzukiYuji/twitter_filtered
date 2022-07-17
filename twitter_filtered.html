@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Twitter Filtered</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+    <script>
+        $(function () {
+            const today = new Date();
+            today.setDate(today.getDate());
+            const yyyy = today.getFullYear();
+            const mm = ("0"+(today.getMonth()+1)).slice(-2);
+            const dd = ("0"+today.getDate()).slice(-2);
+            document.getElementById("since_date").value=yyyy+'-'+mm+'-'+dd;
+            document.getElementById("until_date").value=yyyy+'-'+mm+'-'+dd;
+
+            $('#jump').on("click", function () {
+                let url = 'https://twitter.com/search?q=filter%3Afollows%20include%3Anativeretweets%20include%3Areplies%20since%3A2022-07-17_18%3A00%3A00_JST%20until%3A2022-07-17_19%3A00%3A00_JST&src=typed_query&f=live'
+                const since_date = $('#since_date').val();
+                const since_time = $('#since_time').val().replace('_', '%3A');
+                url = url.replace('2022-07-17_18%3A00', `${since_date}_${since_time}`);
+                const until_date = $('#until_date').val();
+                const until_time = $('#until_time').val().replace('_', '%3A');
+                url = url.replace('2022-07-17_19%3A00', `${until_date}_${until_time}`);
+                window.open(url, '_blank')
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        開始時間
+        <input type="date" id="since_date" name="since_date" min="2022-01-01" max="2030-12-31" required>
+        <input type="time" id="since_time" name="since_time" value="00:00" min="00:00" max="23:59" required>
+    </div>
+    <div>
+        終了時間
+        <input type="date" id="until_date" name="until_date" min="2022-01-01" max="2030-12-31" required>
+        <input type="time" id="until_time" name="until_time" value="00:00" min="00:00" max="23:59" required>
+    </div>
+    <button id="jump">ジャンプ</button>
+</body>
