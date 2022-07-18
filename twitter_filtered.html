@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Twitter Filtered</title>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs"></script>
     <script type="module">
         import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs'
@@ -22,6 +21,7 @@
             const since_time_cookie = Cookies.get('since_time');
             const until_date_cookie = Cookies.get('until_date');
             const until_time_cookie = Cookies.get('until_time');
+
             if (since_date_cookie) {
                 document.getElementById("since_date").value = since_date_cookie;
             } else {
@@ -42,6 +42,21 @@
             } else {
                 document.getElementById("until_time").value = '00:00';
             }
+
+            $('#set').on("click", function () {
+                const now = new Date();
+                const yyyy_now = now.getFullYear();
+                const month_now = ("0" + (today.getMonth() + 1)).slice(-2);
+                const dd_now = ("0" + today.getDate()).slice(-2);
+                const hh_now = ("0" + today.getHours()).slice(-2);
+                const mm_now = ("0" + today.getMinutes()).slice(-2);
+                const until_date = $('#until_date').val();
+                const until_time = $('#until_time').val();
+                $('#since_date').val(until_date);
+                $('#since_time').val(until_time);
+                $('#until_date').val(yyyy_now + '-' + month_now + '-' + dd_now);
+                $('#until_time').val(hh_now + ':' + mm_now);
+            });
 
             $('#jump').on("click", function () {
                 Cookies.set('since_date', $('#since_date').val());
@@ -73,5 +88,6 @@
         <input type="date" id="until_date" name="until_date" min="2022-01-01" max="2030-12-31" required>
         <input type="time" id="until_time" name="until_time" value="00:00" min="00:00" max="23:59" required>
     </div>
+    <button id="set">セット</button>
     <button id="jump">ジャンプ</button>
 </body>
