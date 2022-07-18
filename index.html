@@ -5,17 +5,50 @@
     <meta charset="UTF-8">
     <title>Twitter Filtered</title>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs"></script>
+    <script type="module">
+        import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs'
+
         $(function () {
             const today = new Date();
             today.setDate(today.getDate());
             const yyyy = today.getFullYear();
-            const mm = ("0"+(today.getMonth()+1)).slice(-2);
-            const dd = ("0"+today.getDate()).slice(-2);
-            document.getElementById("since_date").value=yyyy+'-'+mm+'-'+dd;
-            document.getElementById("until_date").value=yyyy+'-'+mm+'-'+dd;
+            const mm = ("0" + (today.getMonth() + 1)).slice(-2);
+            const dd = ("0" + today.getDate()).slice(-2);
+            const today_date = yyyy + '-' + mm + '-' + dd;
+
+            const since_date_cookie = Cookies.get('since_date')
+            const since_time_cookie = Cookies.get('since_time');
+            const until_date_cookie = Cookies.get('until_date');
+            const until_time_cookie = Cookies.get('until_time');
+            if (since_date_cookie) {
+                document.getElementById("since_date").value = since_date_cookie;
+            } else {
+                document.getElementById("since_date").value = yyyy + '-' + mm + '-' + dd;
+            }
+            if (until_date_cookie) {
+                document.getElementById("until_date").value = until_date_cookie;
+            } else {
+                document.getElementById("until_date").value = yyyy + '-' + mm + '-' + dd;
+            }
+            if (since_time_cookie) {
+                document.getElementById("since_time").value = since_time_cookie;
+            } else {
+                document.getElementById("since_time").value = '00:00';
+            }
+            if (until_time_cookie) {
+                document.getElementById("until_time").value = until_time_cookie;
+            } else {
+                document.getElementById("until_time").value = '00:00';
+            }
 
             $('#jump').on("click", function () {
+                Cookies.set('since_date', $('#since_date').val());
+                Cookies.set('since_time', $('#since_time').val());
+                Cookies.set('until_date', $('#until_date').val());
+                Cookies.set('until_time', $('#until_time').val());
+
                 let url = 'https://twitter.com/search?q=filter%3Afollows%20include%3Anativeretweets%20include%3Areplies%20since%3A2022-07-17_18%3A00%3A00_JST%20until%3A2022-07-17_19%3A00%3A00_JST&src=typed_query&f=live'
                 const since_date = $('#since_date').val();
                 const since_time = $('#since_time').val().replace('_', '%3A');
